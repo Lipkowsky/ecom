@@ -12,6 +12,8 @@
   "dependencies": {
     "@clerk/nextjs": "^7.0.5",
     "@hookform/resolvers": "^5.2.1",
+    "@stripe/react-stripe-js": "^3.6.0",
+    "@stripe/stripe-js": "^7.0.0",
     "lucide-react": "^0.535.0",
     "next": "15.4.5",
     "react": "19.1.0",
@@ -23,6 +25,8 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@repo/types": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
     "@tailwindcss/postcss": "@hookform/resolvers/zod",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -30,7 +34,6 @@
     "eslint": "^9",
     "eslint-config-next": "15.4.5",
     "tailwindcss": "^4",
-    "typescript": "^5",
-    "@repo/typescript-config": "workspace:*"
+    "typescript": "^5"
   }
 }

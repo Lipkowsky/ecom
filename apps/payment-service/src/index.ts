@@ -1,34 +1,46 @@
 import { serve } from "@hono/node-server";
-import { timeStamp } from "console";
 import { Hono } from "hono";
-import { uptime } from "process";
-import { clerkMiddleware, getAuth } from '@hono/clerk-auth'
+import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
+import sessionRoute from "./routes/session.route";
+import { cors } from "hono/cors";
 
 const app = new Hono();
-app.use('*', clerkMiddleware())
+app.use("*", clerkMiddleware());
+app.use(
+  "*",
+  cors({
+    origin: ["http://localhost:3002"],
+  }),
+);
 
 app.get("/health", (c) => {
   return c.json({
-    status: 'ok',
+    status: "ok",
     uptime: process.uptime(),
-    timestamp: Date.now()
-  })
+    timestamp: Date.now(),
+  });
 });
 
-app.get('/test', (c) => {
-  const { userId } = getAuth(c)
+// app.post("/create-stripe-product", async (c) => {
+//   const res = await stripe.products.create({
+//     id: "123",
+//     name: "Test product",
+//     default_price_data: {
+//       currency: "usd",
+//       unit_amount: 10 * 100,
+//     },
+//   });
+//   return c.json(res);
+// });
 
-  if (!userId) {
-    return c.json({
-      message: 'You are not logged in.',
-    })
-  }
+// app.get("/stripe-product-price", async (c) => {
+//   const res = await stripe.prices.list({
+//     product: "123",
+//   })
+//   return c.json(res);
+// });
 
-  return c.json({
-    message: 'Payment Service Authenticated!',
-  })
-})
-
+app.route("/sessions", sessionRoute);
 
 const start = async () => {
   try {
@@ -43,7 +55,7 @@ const start = async () => {
     );
   } catch (error) {
     console.log(error);
-    process.exit(1)
+    process.exit(1);
   }
 };
 start();

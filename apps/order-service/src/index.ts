@@ -1,5 +1,8 @@
 import { clerkPlugin, getAuth } from "@clerk/fastify";
 import Fastify from "fastify";
+import { shouldBeUser } from "../middleware/authMiddleware";
+import { connectOrderDB } from "@repo/order-db";
+import { orderRoute } from "../routes/order";
 
 const fastify = Fastify();
 fastify.register(clerkPlugin);
@@ -12,20 +15,22 @@ fastify.get("/health", (request, reply) => {
   });
 });
 
-fastify.get("/test", (request, reply) => {
-  const { userId } = getAuth(request);
-  if (!userId) {
-    return reply.send({ message: "You are not logged in" });
-  }
-  return reply.send({ message: "Order service is authenticated" });
+fastify.get("/test", { preHandler: shouldBeUser }, (request, reply) => {
+  return reply.send({
+    message: "Order service is authenticated",
+    userId: request.userId,
+  });
 });
+
+fastify.register(orderRoute);
 
 const start = async () => {
   try {
+    await connectOrderDB();
     await fastify.listen({ port: 8001 });
     console.log("Product service is running on port: 8001");
   } catch (err) {
-    fastify.log.error(err);
+    console.log(err);
     process.exit(1);
   }
 };
