@@ -14,6 +14,7 @@
   "dependencies": {
     "@clerk/express": "^2.0.5",
     "@repo/product-db": "workspace:*",
+    "@repo/kafka": "workspace:*",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "express": "^5.2.1"

@@ -3,6 +3,7 @@ import { Hono } from "hono";
 import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import sessionRoute from "./routes/session.route";
 import { cors } from "hono/cors";
+import webhookRoute from "./routes/webhooks.route";
 
 const app = new Hono();
 app.use("*", clerkMiddleware());
@@ -41,6 +42,7 @@ app.get("/health", (c) => {
 // });
 
 app.route("/sessions", sessionRoute);
+app.route("/webhooks", webhookRoute);
 
 const start = async () => {
   try {
