@@ -1,0 +1,24 @@
+{
+  "name": "email-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm dlx tsx --env-file=.env --watch src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.32.1",
+  "dependencies": {
+    "@repo/kafka": "workspace:*",
+    "@types/nodemailer": "^8.0.0",
+    "nodemailer": "^8.0.7"
+  },
+  "devDependencies": {
+    "@repo/types": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "^25.6.2"
+  }
+}

@@ -4,6 +4,9 @@ import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import sessionRoute from "./routes/session.route";
 import { cors } from "hono/cors";
 import webhookRoute from "./routes/webhooks.route";
+import { consumer, producer } from "../utils/kafka";
+import { runKafkaSubscriptions } from "../utils/subscriptions";
+
 
 const app = new Hono();
 app.use("*", clerkMiddleware());
@@ -46,6 +49,11 @@ app.route("/webhooks", webhookRoute);
 
 const start = async () => {
   try {
+    Promise.all([
+      await producer.connect(),
+      await consumer.connect(),
+    ]);
+    await runKafkaSubscriptions();
     serve(
       {
         fetch: app.fetch,
