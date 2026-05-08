@@ -22,7 +22,7 @@ import { Input } from "./ui/input";
 
 import { Button } from "./ui/button";
 import { toast } from "react-toastify";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@clerk/nextjs";
 import { UserFormSchema } from "@repo/types";
 
@@ -39,6 +39,7 @@ const AddUser = () => {
   });
 
   const { getToken } = useAuth();
+  const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: async (data: z.infer<typeof UserFormSchema>) => {
       const token = await getToken();
@@ -60,6 +61,7 @@ const AddUser = () => {
     },
     onSuccess: () => {
       toast.success("User created successfully");
+      queryClient.invalidateQueries({ queryKey: ['users'] })
     },
     onError: (error) => {
       toast.error(error.message);
